@@ -1,0 +1,31 @@
+version: "3"
+### GITTEA #####
+services:
+  gitea:
+    image: gitea/gitea:latest
+    container_name: gitea
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    volumes:
+      - /home/stack/gitea/data:/data
+    ports:
+       - "3000:3000"
+       - "2222:22"
+    depends_on:
+      - gitea_db
+
+  gitea_db:
+    image: mysql:5.7
+    container_name: gitea_mysql_db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=gitea
+      - MYSQL_USER=gitea
+      - MYSQL_PASSWORD=gitea
+      - MYSQL_DATABASE=gitea
+    volumes:
+      - /home/stack/gitea/mysql:/var/lib/mysql
+    ports:
+       - "3306:3306"
